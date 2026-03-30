@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZymaFlow BioRefinery — Fermentation Waste. Reimagined.</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+
+/* ══════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════ */
+:root {
+  --teal:       #286a68;
+  --teal-light: #3a8a87;
+  --teal-dark:  #1a4a48;
+  --teal-pale:  #e8f4f3;
+  --teal-mid:   #c2dedd;
+  --black:      #0f1a1a;
+  --charcoal:   #1e2d2d;
+  --gray-dark:  #2a3535;
+  --gray-mid:   #4a5f5f;
+  --white:      #ffffff;
+  --gold:       #c8a84b;
+  --bg:         #0a1212;
+
+  /* 8-point spacing scale */
+  --s1:  8px;  --s2: 16px; --s3: 24px;
+  --s4:  32px; --s5: 48px; --s6: 64px;
+  --s7:  80px; --s8: 96px; --s9: 120px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 68px; }
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════
+   SHARED
+══════════════════════════════ */
+.section-inner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: var(--s9) 5%;
+}
+.section-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--teal-light);
+  margin-bottom: var(--s2);
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  margin-bottom: var(--s3);
+}
+.section-title span { color: var(--teal-light); }
+.section-body {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: rgba(255,255,255,0.58);
+  max-width: 58ch;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--teal);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--teal-light); }
+.btn-outline {
+  display: inline-block;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.75);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color: var(--teal-light); color: var(--teal-light); }
+
+/* Scroll reveal — content visible by default; JS opts into animation */
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.72s ease, transform 0.72s ease;
+}
+.js-anim .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.js-anim .reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+.d4 { transition-delay: 0.4s; }
+
+/* ══════════════════════════════
+   NAV
+══════════════════════════════ */
+nav {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  height: 68px;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.4s, box-shadow 0.4s;
+}
+nav.scrolled {
+  background: rgba(10,18,18,0.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 rgba(40,106,104,0.22);
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-z { width: 32px; height: 34px; flex-shrink: 0; }
+.nav-wordmark { display: flex; flex-direction: column; gap: 3px; }
+.nav-name { font-size: 15px; font-weight: 900; color: var(--white); letter-spacing: 0.04em; line-height: 1; }
+.nav-sub { font-size: 10px; font-weight: 600; color: var(--teal-light); letter-spacing: 0.16em; text-transform: uppercase; line-height: 1; }
+.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-links a {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255,255,255,0.6);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--teal-light); }
+.nav-cta { background: var(--teal) !important; color: var(--white) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.2s !important; }
+.nav-cta:hover { background: var(--teal-light) !important; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--white); }
+.mobile-menu {
+  display: none; position: fixed; top: 68px; inset-inline: 0;
+  background: rgba(10,18,18,0.98); padding: 24px 5%; z-index: 99;
+  border-top: 1px solid rgba(40,106,104,0.2); flex-direction: column; gap: 20px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 13px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.7); text-decoration: none; }
+
+/* ══════════════════════════════
+   HERO  —  bg (#0a1212), user-approved
+══════════════════════════════ */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 68px 8% 8%;
+  overflow: hidden;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(40,106,104,0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40,106,104,0.1) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero-glow {
+  position: absolute; top: -20%; right: -10%; width: 60%; height: 80%;
+  background: radial-gradient(ellipse, rgba(40,106,104,0.1) 0%, transparent 68%);
+  pointer-events: none;
+}
+.hero-accent {
+  position: absolute; top: 0; right: 0; width: 45%; height: 100%;
+  background: linear-gradient(135deg, transparent 0%, var(--teal-dark) 100%);
+  opacity: 0.5; pointer-events: none;
+}
+.hero-z {
+  position: absolute; right: -6%; top: -8%; width: 55%;
+  opacity: 0.04; pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; max-width: 820px; }
+.hero-pretag {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--teal-light); margin-bottom: var(--s3);
+  opacity: 0; animation: up 0.8s ease 0.2s forwards;
+}
+.hero-h1 {
+  font-size: clamp(38px, 5.5vw, 72px); font-weight: 900;
+  line-height: 1.04; letter-spacing: -0.028em; color: var(--white);
+  margin-bottom: var(--s3);
+  opacity: 0; animation: up 0.8s ease 0.4s forwards;
+}
+.hero-h1 span { color: var(--teal-light); }
+.hero-sub {
+  font-size: clamp(14px, 1.4vw, 17px); font-weight: 400;
+  line-height: 1.72; color: rgba(255,255,255,0.52); max-width: 58ch;
+  margin-bottom: var(--s6);
+  opacity: 0; animation: up 0.8s ease 0.6s forwards;
+}
+.hero-stats {
+  display: flex; gap: 40px; align-items: flex-start;
+  margin-bottom: var(--s6); flex-wrap: wrap;
+  opacity: 0; animation: up 0.8s ease 0.8s forwards;
+}
+.hero-stat { display: flex; flex-direction: column; gap: 5px; }
+.hero-stat-val { font-size: clamp(18px, 2.4vw, 28px); font-weight: 900; color: var(--teal-light); letter-spacing: -0.02em; line-height: 1; }
+.hero-stat-label { font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
+.hero-div { width: 1px; height: 30px; background: rgba(255,255,255,0.1); align-self: center; }
+.hero-actions { display: flex; gap: var(--s2); flex-wrap: wrap; opacity: 0; animation: up 0.8s ease 1s forwards; }
+
+@keyframes up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════
+   IMPACT  —  teal-dark, glassmorphism bento
+   Section order: 2 (sits right after hero)
+══════════════════════════════ */
+#impact {
+  background: var(--teal-dark);
+  position: relative;
+  overflow: hidden;
+}
+/* Diagonal top cut — creates slanted transition from hero */
+#impact::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 56px;
+  background: var(--bg);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  pointer-events: none;
+}
+#impact .section-label { color: rgba(194,222,221,0.85); }
+#impact .section-title { color: var(--white); }
+#impact .section-body { color: rgba(255,255,255,0.62); max-width: 64ch; }
+
+/* Ghost Z */
+.impact-z {
+  position: absolute; right: -4%; top: -6%; width: 44%;
+  opacity: 0.04; pointer-events: none;
+}
+
+/* Asymmetric bento grid */
+.impact-bento {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  margin-top: var(--s7);
+}
+.itile {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 8px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background 0.25s, border-color 0.25s;
+}
+.itile:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.16); }
+/* Tall left — spans 2 rows */
+.itile-hero {
+  grid-row: 1 / span 2;
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.13);
+}
+/* Full-width bottom row */
+.itile-full {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--s5);
+}
+.itile-full .itile-body { flex: 1; }
+.itile-tag {
+  display: inline-block;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--teal-light); margin-top: auto; padding-top: var(--s2);
+}
+.itile-title { font-size: 15px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; }
+.itile-hero .itile-title { font-size: 18px; }
+.itile-bar { width: 28px; height: 2px; background: var(--teal-light); flex-shrink: 0; }
+.itile-text { font-size: 13px; color: rgba(255,255,255,0.52); line-height: 1.68; }
+
+/* ══════════════════════════════
+   OPPORTUNITY  —  near-black, ghost-number approach
+   (no nav link — transitions naturally between impact and technology)
+══════════════════════════════ */
+#opportunity {
+  background: var(--black);
+  position: relative;
+}
+#opportunity .section-label { color: var(--teal-light); }
+#opportunity .section-title { color: var(--white); }
+#opportunity .section-body { color: rgba(255,255,255,0.55); }
+
+.opp-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s6);
+  margin-top: var(--s7);
+}
+.opp-col {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: var(--s5);
+  border-bottom: 1px solid rgba(40,106,104,0.2);
+}
+/* The ghost number IS the visual — no card border */
+.opp-num {
+  display: block;
+  font-size: clamp(80px, 10vw, 136px);
+  font-weight: 900;
+  color: var(--teal);
+  opacity: 0.09;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  margin-bottom: -12px;
+  pointer-events: none;
+}
+.opp-heading {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--white);
+  margin-bottom: var(--s2);
+}
+.opp-body {
+  font-size: 14px; color: rgba(255,255,255,0.48); line-height: 1.72; flex-grow: 1;
+}
+
+/* ══════════════════════════════
+   TECHNOLOGY  —  charcoal, Phase 02 featured
+══════════════════════════════ */
+#technology {
+  background: var(--charcoal);
+  position: relative;
+}
+#technology .section-label { color: var(--teal-light); }
+#technology .section-title { color: var(--white); }
+#technology .section-body { color: rgba(255,255,255,0.55); }
+
+.tech-phases {
+  display: grid;
+  grid-template-columns: 1fr 1.12fr 1fr;
+  gap: 3px;
+  margin-top: var(--s7);
+}
+.tphase {
+  background: rgba(255,255,255,0.04);
+  padding: var(--s6) var(--s5);
+  display: flex; flex-direction: column; gap: var(--s2);
+  transition: background 0.25s;
+  position: relative;
+}
+.tphase:hover { background: rgba(255,255,255,0.07); }
+/* Phase 02 gets the featured teal treatment */
+.tphase-featured { background: var(--teal); }
+.tphase-featured:hover { background: var(--teal-light); }
+
+.tphase-num {
+  font-size: clamp(56px, 7.5vw, 92px); font-weight: 900;
+  color: rgba(255,255,255,0.07); letter-spacing: -0.05em; line-height: 0.9;
+  margin-bottom: var(--s2);
+}
+.tphase-featured .tphase-num { color: rgba(255,255,255,0.14); }
+.tphase-title { font-size: 16px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; }
+.tphase-bar { width: 28px; height: 2px; background: var(--teal-light); }
+.tphase-featured .tphase-bar { background: rgba(255,255,255,0.45); }
+.tphase-text { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.68; }
+.tphase-featured .tphase-text { color: rgba(255,255,255,0.78); }
+
+/* Arrow connectors between phases */
+.tphase:not(.tphase-featured):not(:last-child)::after,
+.tphase-featured::after {
+  content: '→';
+  position: absolute;
+  right: -18px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px; color: var(--teal-light); opacity: 0.6;
+  z-index: 2;
+}
+.tphase-featured::after { color: var(--white); opacity: 0.45; }
+.tphase:last-child::after { display: none; }
+
+/* IP notice */
+.tech-ip {
+  margin-top: var(--s4);
+  padding: 18px 24px;
+  border: 1px solid rgba(40,106,104,0.28);
+  border-left: 3px solid var(--teal);
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.tech-ip-text {
+  font-size: 12px; color: rgba(255,255,255,0.42); line-height: 1.6;
+}
+.tech-ip-text strong { color: var(--teal-light); font-weight: 600; }
+
+/* ══════════════════════════════
+   PRODUCTS  —  near-black, asymmetric bento
+══════════════════════════════ */
+#products { background: var(--bg); }
+#products .section-label { color: var(--teal-light); }
+#products .section-title { color: var(--white); }
+#products .section-body { color: rgba(255,255,255,0.55); }
+
+/* Bento: Functional Proteins (wide top-left) + Beta-Glucan (tall right) + Gut Health (bottom-left) */
+.products-bento {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 16px;
+  margin-top: var(--s7);
+}
+.pcard {
+  background: var(--charcoal);
+  border-radius: 8px;
+  padding: 44px 40px;
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative; overflow: hidden;
+  transition: transform 0.28s, background 0.28s;
+}
+.pcard::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--teal-light), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.38s ease;
+}
+.pcard:hover { transform: translateY(-5px); background: #263535; }
+.pcard:hover::before { transform: scaleX(1); }
+
+/* Beta-Glucan spans both rows on the right column */
+.pcard-tall { grid-column: 2; grid-row: 1 / span 2; }
+.pcard-tall .pcard-text { flex-grow: 1; }
+
+.pcard-label { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal-light); }
+.pcard-title { font-size: clamp(18px, 2vw, 22px); font-weight: 800; color: var(--white); letter-spacing: -0.015em; line-height: 1.2; }
+.pcard-bar { width: 32px; height: 2px; background: var(--teal); }
+.pcard-text { font-size: 14px; color: rgba(255,255,255,0.48); line-height: 1.72; }
+.pcard-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: var(--s2); }
+.chip {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.38); border: 1px solid rgba(255,255,255,0.1);
+  padding: 4px 10px; border-radius: 20px;
+}
+
+/* ══════════════════════════════
+   MARKET  —  vibrant teal, THE colour moment
+   Typography-driven stats, no boxes
+══════════════════════════════ */
+#market {
+  background: var(--teal);
+  position: relative; overflow: hidden;
+}
+#market::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--teal-dark) 0%, transparent 55%);
+  opacity: 0.5; pointer-events: none;
+}
+/* Subtle diagonal top edge */
+#market::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 48px;
+  background: var(--bg);
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 100%);
+  pointer-events: none;
+}
+.market-wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding: var(--s9) 5%;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--s8); align-items: center;
+  position: relative; z-index: 1;
+}
+#market .section-label { color: rgba(194,222,221,0.8); }
+#market .section-title { color: var(--white); }
+.market-body { font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.72); }
+.market-body + .market-body { margin-top: var(--s2); }
+
+/* Stats as pure typography — no card boxes */
+.market-stats { display: flex; flex-direction: column; }
+.mstat {
+  padding: var(--s4) 0;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.mstat:first-child { padding-top: 0; }
+.mstat:last-child { border-bottom: none; padding-bottom: 0; }
+.mstat-val {
+  font-size: clamp(32px, 4vw, 52px); font-weight: 900;
+  color: var(--white); letter-spacing: -0.03em; line-height: 1;
+}
+.mstat-desc { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.62); line-height: 1.5; max-width: 38ch; }
+
+/* ══════════════════════════════
+   CONTACT  —  near-black
+══════════════════════════════ */
+#contact { background: var(--black); position: relative; overflow: hidden; }
+.contact-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(40,106,104,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(40,106,104,0.07) 1px, transparent 1px);
+  background-size: 60px 60px; pointer-events: none;
+}
+.contact-accent-bg {
+  position: absolute; top: 0; right: 0; width: 40%; height: 100%;
+  background: linear-gradient(135deg, transparent 0%, rgba(26,74,72,0.32) 100%);
+  pointer-events: none;
+}
+.contact-wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding: var(--s9) 5%;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--s8); align-items: start;
+  position: relative; z-index: 1;
+}
+.contact-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--teal-light); margin-bottom: var(--s2); }
+.contact-title {
+  font-size: clamp(28px, 4vw, 52px); font-weight: 900;
+  letter-spacing: -0.025em; line-height: 1.06; color: var(--white); margin-bottom: var(--s3);
+}
+.contact-title span { color: var(--teal-light); }
+.contact-body { font-size: 15px; color: rgba(255,255,255,0.48); line-height: 1.72; margin-bottom: var(--s5); max-width: 46ch; }
+.contact-btns { display: flex; gap: var(--s2); flex-wrap: wrap; }
+.contact-cards { display: flex; flex-direction: column; gap: var(--s2); }
+.ccard {
+  background: rgba(40,106,104,0.08);
+  border: 1px solid rgba(40,106,104,0.18);
+  border-left: 3px solid var(--teal);
+  border-radius: 4px;
+  padding: 24px 28px;
+  display: flex; flex-direction: column; gap: 6px;
+  transition: background 0.22s;
+}
+.ccard:hover { background: rgba(40,106,104,0.14); }
+.ccard-title { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--teal-light); }
+.ccard-desc { font-size: 13px; color: rgba(255,255,255,0.42); line-height: 1.55; }
+.ccard-email { font-size: 13px; font-weight: 600; color: var(--teal-light); text-decoration: none; margin-top: 4px; }
+.ccard-email:hover { color: var(--white); }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer {
+  background: var(--bg);
+  border-top: 1px solid rgba(40,106,104,0.14);
+  padding: var(--s7) 5%;
+  display: flex; flex-direction: column; align-items: center; gap: var(--s3);
+}
+.footer-z { width: 36px; opacity: 0.42; }
+.footer-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.38); letter-spacing: 0.1em; }
+.footer-tagline { font-size: 9px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: var(--teal-light); opacity: 0.78; }
+.footer-location { font-size: 9px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.18); }
+.footer-copy { font-size: 11px; color: rgba(255,255,255,0.18); letter-spacing: 0.04em; }
+
+/* ══════════════════════════════
+   RESPONSIVE
+══════════════════════════════ */
+@media (max-width: 960px) {
+  .impact-bento { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .itile-hero { grid-row: auto; }
+  .itile-full { flex-direction: column; gap: var(--s2); }
+  .opp-cols { grid-template-columns: 1fr; gap: var(--s5); }
+  .tech-phases { grid-template-columns: 1fr; }
+  .tphase:not(:last-child)::after { display: none; }
+  .products-bento { grid-template-columns: 1fr; grid-template-rows: auto; }
+  .pcard-tall { grid-column: auto; grid-row: auto; }
+  .market-wrap { grid-template-columns: 1fr; gap: var(--s6); }
+  .contact-wrap { grid-template-columns: 1fr; gap: var(--s6); }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  #hero { padding: 68px 6% 10%; }
+  .hero-stats { gap: 20px; }
+  .hero-div { display: none; }
+  .section-inner { padding: 72px 6%; }
+  .market-wrap,
+  .contact-wrap { padding: 72px 6%; }
+  #market::after { display: none; }
+  #impact::before { display: none; }
+}
+
+
+  /* ══════════════════════════════
+     MODAL OVERLAY
+  ══════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(8,14,14,0.88);
+    backdrop-filter: blur(6px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: #111e1e;
+    border: 1px solid rgba(40,106,104,0.28);
+    border-top: 3px solid var(--teal);
+    border-radius: 6px;
+    width: 100%;
+    max-width: 540px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 44px 40px 36px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--teal-dark) transparent;
+  }
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: none; border: none;
+    color: rgba(255,255,255,0.35);
+    font-size: 22px; cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--white); }
+  .modal-title {
+    font-size: 18px; font-weight: 800;
+    color: var(--white); letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-size: 12px; color: rgba(255,255,255,0.38);
+    line-height: 1.55; margin-bottom: 28px;
+  }
+
+  /* ── FORM ELEMENTS ── */
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .form-group {
+    display: flex; flex-direction: column;
+    gap: 6px; margin-bottom: 16px;
+  }
+  .form-group label {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--teal-light);
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(40,106,104,0.28);
+    border-radius: 3px;
+    padding: 11px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    color: var(--white);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%233a8a87' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  .form-group select option { background: #111e1e; color: var(--white); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--teal-light);
+    background: rgba(40,106,104,0.07);
+  }
+  .form-group textarea { resize: vertical; min-height: 96px; }
+  .form-submit {
+    width: 100%; margin-top: 8px;
+    background: var(--teal);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 15px 32px;
+    border: none; border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    position: relative;
+  }
+  .form-submit:hover { background: var(--teal-light); }
+  .form-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+  .form-note {
+    font-size: 10px; color: rgba(255,255,255,0.2);
+    line-height: 1.6; margin-top: 14px; text-align: center;
+  }
+  .form-success-msg {
+    text-align: center; padding: 32px 16px;
+  }
+  .form-success-msg h3 {
+    font-size: 17px; font-weight: 700;
+    color: var(--teal-light); margin-bottom: 10px;
+  }
+  .form-success-msg p {
+    font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.65;
+  }
+
+  @media (max-width: 540px) {
+    .modal-box { padding: 36px 22px 28px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Z MARK SYMBOL — defined once, referenced throughout -->
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="zm" viewBox="0 0 105.56673 111.29659">
+    <g transform="translate(-124.6313,-103.56084)">
+      <g transform="matrix(0.99238277,0,0,0.99238277,280.86629,4.3489355)">
+        <path fill="currentColor" d="m -157.4342,191.07509 v -5.34953 l 2.04323,-2.27929 c 1.12378,-1.25361 3.29834,-3.6485 4.83234,-5.32199 1.53401,-1.67349 3.57624,-3.93568 4.53829,-5.02709 0.96206,-1.0914 2.92492,-3.24128 4.36193,-4.7775 1.43702,-1.53622 3.92244,-4.27116 5.52317,-6.07763 1.60073,-1.80647 3.52017,-3.94285 4.26543,-4.7475 1.40416,-1.51605 3.19217,-3.49598 12.80019,-14.17416 3.1287,-3.47718 6.61128,-7.31136 7.73906,-8.52041 1.12779,-1.20905 2.05052,-2.31413 2.05052,-2.45574 0,-0.16502 -8.64543,-0.25747 -24.07708,-0.25747 h -24.07708 v -3.43481 -3.43481 l 27.31823,1.7e-4 27.31823,1.7e-4 2.43605,-2.58463 c 1.339829,-1.42155 2.401443,-2.70369 2.359141,-2.84921 -0.05075,-0.17458 -10.172641,-0.25496 -29.754281,-0.2363 l -29.67737,0.0283 v -3.53402 -3.53401 h 33.05465 33.054645 l 2.333374,-2.51313 c 1.283354,-1.38221 2.333371,-2.66214 2.333371,-2.84427 0,-0.26321 -7.246792,-0.34263 -35.32188,-0.38713 l -35.32187,-0.056 v -3.34701 -3.347 l 43.45782,-0.03659 c 23.9018,-0.02014 43.457816,0.06091 43.457813,0.18008 -5e-6,0.11917 -1.815711,2.21235 -4.034904,4.65151 -5.719852,6.2868 -10.47683,11.56018 -11.957698,13.25578 -0.699005,0.80036 -2.005317,2.22911 -2.902913,3.175 -1.771311,1.8666 -6.621243,7.22781 -12.428648,13.73887 -2.02135,2.26627 -4.4026,4.8944 -5.29166,5.84029 -0.88906,0.94588 -2.92616,3.19927 -4.52689,5.00753 -1.60073,1.80826 -3.99344,4.48716 -5.31714,5.95312 -3.153,3.49188 -10.99929,12.12961 -12.3953,13.6456 -2.30937,2.50785 -11.01811,12.17053 -14.40755,15.98574 -1.94975,2.19466 -4.39053,4.88683 -5.42396,5.98258 -1.03343,1.09575 -3.23744,3.53653 -4.89779,5.42396 -1.66036,1.88742 -3.11887,3.47136 -3.24115,3.51987 -0.12228,0.0485 -0.22232,-2.3191 -0.22232,-5.26134 z"/>
+        <path fill="currentColor" d="m -145.26335,212.02029 c -3e-5,-0.14715 2.40522,-2.86722 7.27602,-8.2284 7.96092,-8.76239 12.66727,-14.00403 16.66875,-18.56463 1.06619,-1.21515 10.58923,-11.71974 15.74271,-17.36532 1.52797,-1.67387 3.79016,-4.19758 5.02708,-5.60823 1.236932,-1.41066 4.094432,-4.57378 6.350005,-7.02915 2.255573,-2.45537 4.636823,-5.05941 5.291667,-5.78675 0.654843,-0.72734 2.015553,-2.2202 3.023801,-3.31746 2.816426,-3.06509 3.6088,-3.93475 9.411507,-10.3294 2.971125,-3.27422 6.77945,-7.44141 8.462944,-9.26042 1.683496,-1.81901 4.01017,-4.37677 5.170387,-5.68392 3.146388,-3.54484 11.304556,-12.43046 11.480906,-12.50463 0.137435,-0.0578 0.204142,8.95826 0.07415,10.02226 -0.02908,0.23796 -1.570908,2.09482 -3.426298,4.12635 -1.855391,2.03153 -5.337832,5.88495 -7.738756,8.56317 -5.522828,6.16067 -11.690969,12.95406 -15.471968,17.04031 -1.615803,1.74625 -5.135764,5.61518 -7.822142,8.59763 -2.686378,2.98245 -5.604076,6.19713 -6.483773,7.14375 -0.8797,0.94662 -3.14578,3.44753 -5.035735,5.55758 -1.889956,2.11005 -4.597805,5.13248 -6.017445,6.71651 -1.41963,1.58403 -2.53689,3.01278 -2.48279,3.175 0.0715,0.21438 7.556122,0.29328 27.401756,0.28884 l 27.303396,-0.006 -0.07341,3.4457 -0.07341,3.44569 -30.691667,0.062 -30.691665,0.062 -2.57569,2.71611 c -1.41663,1.49386 -2.57749,2.80541 -2.57969,2.91455 -0.002,0.10914 14.99788,0.19844 33.333503,0.19844 h 33.3375 v 3.43958 3.43958 h -36.615267 -36.615276 l -2.41077,2.69907 c -1.32592,1.48448 -2.41077,2.79417 -2.41077,2.91041 0,0.11625 17.56172,0.21136 39.026047,0.21136 h 39.026041 v 3.43958 3.43958 l -1.124479,0.0237 c -3.949126,0.0833 -93.067139,0.0887 -93.067169,0.006 z"/>
+        <path fill="currentColor" d="m -157.42748,208.81654 0.007,-3.30789 2.70526,-2.92083 c 1.48789,-1.60646 3.65776,-3.98249 4.82192,-5.28006 1.16417,-1.29758 2.77151,-3.08263 3.57188,-3.96677 0.80036,-0.88414 2.76489,-3.08764 4.36562,-4.89667 1.60073,-1.80903 3.74589,-4.18649 4.76702,-5.28324 1.02113,-1.09675 3.23557,-3.54191 4.92097,-5.43368 1.6854,-1.89177 4.42181,-4.94081 6.0809,-6.77565 8.67888,-9.59824 10.37902,-11.4742 13.0622,-14.41309 3.07499,-3.36802 8.93924,-9.81072 17.900222,-19.66587 2.965384,-3.26128 6.046452,-6.66994 6.846816,-7.5748 0.800365,-0.90485 3.955521,-4.37343 7.011459,-7.70796 3.055937,-3.33453 6.568281,-7.18588 7.805208,-8.55855 1.236927,-1.37268 2.963333,-3.27776 3.836458,-4.23351 0.873125,-0.95575 3.009681,-3.31004 4.747901,-5.23175 3.039589,-3.36046 3.201416,-3.49487 4.233333,-3.51616 5.845707,-0.120624 8.084227,-0.07785 8.082621,0.15443 -0.0011,0.14552 -1.697662,2.12138 -3.770344,4.39079 -2.07268,2.2694 -5.673511,6.2555 -8.001844,8.85798 -3.931952,4.39492 -6.282478,6.99693 -15.757091,17.44289 -1.979835,2.18282 -6.076892,6.70719 -9.104569,10.05417 -3.02768,3.34698 -5.996025,6.6212 -6.596322,7.27604 -0.600297,0.65485 -2.578452,2.85574 -4.395898,4.89088 -1.81745,2.03514 -4.02609,4.47592 -4.90809,5.42396 -0.88201,0.94804 -2.71643,2.97386 -4.07651,4.50183 -1.36008,1.52797 -3.20323,3.55203 -4.0959,4.49791 -0.89266,0.94589 -4.05886,4.45348 -7.03599,7.79465 -2.97713,3.34117 -6.2464,6.97942 -7.26505,8.08499 -2.02349,2.19617 -9.9115,10.91014 -12.6015,13.92102 -0.9273,1.03791 -3.30657,3.65728 -5.28727,5.82083 -1.9807,2.16355 -4.59583,5.06481 -5.8114,6.44726 l -2.21012,2.51354 -1.92767,5.3e-4 -1.92766,5.3e-4 0.007,-3.30789 z"/>
+      </g>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ══ NAV ══ -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-brand">
+    <svg class="nav-z" viewBox="0 0 105.56673 111.29659" xmlns="http://www.w3.org/2000/svg" style="color:#3a8a87">
+      <use href="#zm"/>
+    </svg>
+    <div class="nav-wordmark">
+      <span class="nav-name">ZymaFlow</span>
+      <span class="nav-sub">BioRefinery</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#technology">Technology</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#impact" onclick="toggleMenu()">Impact</a>
+  <a href="#technology" onclick="toggleMenu()">Technology</a>
+  <a href="#products" onclick="toggleMenu()">Products</a>
+  <a href="#market" onclick="toggleMenu()">Market</a>
+  <a href="#contact" onclick="toggleMenu()">Contact</a>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-accent"></div>
+  <svg class="hero-z" viewBox="0 0 105.56673 111.29659" xmlns="http://www.w3.org/2000/svg" style="color:white">
+    <use href="#zm"/>
+  </svg>
+  <div class="hero-content">
+    <p class="hero-pretag">Alberta, Canada · Fermentation Biorefinery</p>
+    <h1 class="hero-h1">Closing the Loop on<br><span>Fermentation Waste.</span></h1>
+    <p class="hero-sub">ZymaFlow BioRefinery converts fermentation co-products into premium food, nutraceutical, and pet nutrition ingredients — recovering maximum value from every kilogram of feedstock with near-zero waste.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-val">Multiple</span>
+        <span class="hero-stat-label">Product Streams</span>
+      </div>
+      <div class="hero-div"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">Food · Nutraceutical · Pet</span>
+        <span class="hero-stat-label">Target Markets</span>
+      </div>
+      <div class="hero-div"></div>
+      <div class="hero-stat">
+        <span class="hero-stat-val">Alberta</span>
+        <span class="hero-stat-label">Based &amp; Founded</span>
+      </div>
+    </div>
+    <div class="hero-actions">
+      <a href="#technology" class="btn-primary">Our Technology</a>
+      <a href="#contact" class="btn-outline">Work With Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ IMPACT — glassmorphism bento ══ -->
+<section id="impact">
+  <svg class="impact-z" viewBox="0 0 105.56673 111.29659" xmlns="http://www.w3.org/2000/svg" style="color:white; position:absolute; right:-4%; top:-6%; width:44%; opacity:0.04; pointer-events:none;">
+    <use href="#zm"/>
+  </svg>
+  <div class="section-inner" style="position:relative;z-index:1;">
+    <span class="section-label reveal">Sustainability &amp; ESG</span>
+    <h2 class="section-title reveal d1">Built to Reduce.<br><span>Designed to Replace.</span></h2>
+    <p class="section-body reveal d2">ZymaFlow was designed around circular economy principles from the ground up. By redirecting organic-rich co-product streams that would otherwise be discarded, our platform creates measurable environmental value across waste diversion, carbon displacement, and resource efficiency simultaneously.</p>
+
+    <div class="impact-bento">
+      <!-- Tile 1: hero tile — tall left -->
+      <div class="itile itile-hero reveal">
+        <span class="itile-title">Organic Waste Diversion</span>
+        <div class="itile-bar"></div>
+        <p class="itile-text">Co-product streams diverted from wastewater and landfill pathways reduce biological oxygen demand (BOD) loading on municipal treatment infrastructure — measurable, auditable, and directly tied to feedstock volume processed.</p>
+        <span class="itile-tag">Waste Reduction</span>
+      </div>
+      <!-- Tile 2: top right -->
+      <div class="itile reveal d1">
+        <span class="itile-title">Low-Carbon Protein</span>
+        <div class="itile-bar"></div>
+        <p class="itile-text">Fermentation-derived protein carries a fraction of the carbon footprint of animal-derived equivalents — no land use change, no feed conversion losses, no enteric methane.</p>
+        <span class="itile-tag">Carbon Displacement</span>
+      </div>
+      <!-- Tile 3: bottom right -->
+      <div class="itile reveal d2">
+        <span class="itile-title">Ingredient Displacement</span>
+        <div class="itile-bar"></div>
+        <p class="itile-text">Each product stream displaces a higher-footprint incumbent — animal-derived protein, synthetically produced nutraceutical actives, and rendered animal meal in pet nutrition.</p>
+        <span class="itile-tag">Circular Inputs</span>
+      </div>
+      <!-- Tile 4: full-width bottom -->
+      <div class="itile itile-full reveal d3">
+        <div class="itile-bar" style="flex-shrink:0;margin-top:4px;"></div>
+        <div class="itile-body">
+          <span class="itile-title">Industrial Symbiosis</span>
+          <p class="itile-text" style="margin-top:10px;">One industry's co-product stream becomes another's premium input — with low energy requirements and no virgin resource extraction. Applicable across fermentation sectors: brewing, dairy processing, distilling, and industrial fermentation.</p>
+          <span class="itile-tag">Resource Efficiency</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ OPPORTUNITY — ghost number watermarks ══ -->
+<section id="opportunity">
+  <div class="section-inner">
+    <span class="section-label reveal">The Opportunity</span>
+    <h2 class="section-title reveal d1">A Significant Value Gap<br><span>in Fermentation Industries</span></h2>
+    <p class="section-body reveal d2">Fermentation industries generate substantial volumes of co-product material that are routinely undervalued. A new class of biorefinery technology is changing that equation.</p>
+
+    <div class="opp-cols">
+      <div class="opp-col reveal">
+        <span class="opp-num" aria-hidden="true">01</span>
+        <h3 class="opp-heading">Undervalued Co-Products</h3>
+        <p class="opp-body">Fermentation industries generate significant volumes of microbial co-products that are routinely discarded or sold at commodity prices, representing a substantial untapped value stream.</p>
+      </div>
+      <div class="opp-col reveal d1">
+        <span class="opp-num" aria-hidden="true">02</span>
+        <h3 class="opp-heading">Structural Value Lost</h3>
+        <p class="opp-body">Conventional recovery methods sacrifice the structural integrity of the most commercially valuable components, limiting their application in premium food, nutraceutical, and functional ingredient markets.</p>
+      </div>
+      <div class="opp-col reveal d2">
+        <span class="opp-num" aria-hidden="true">03</span>
+        <h3 class="opp-heading">A Better Pathway</h3>
+        <p class="opp-body">A new generation of gentle biorefinery processing unlocks multiple high-value ingredient categories simultaneously from a single waste stream — with proprietary methods and scalable infrastructure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TECHNOLOGY — asymmetric, Phase 02 featured ══ -->
+<section id="technology">
+  <div class="section-inner">
+    <span class="section-label reveal">Our Platform</span>
+    <h2 class="section-title reveal d1">Proprietary Biorefinery<br><span>Technology</span></h2>
+    <p class="section-body reveal d2">A proprietary biorefinery platform that converts fermentation co-product streams into multiple distinct, market-ready ingredient categories. Patent pending. Designed from the outset for collaborative, consortium-based deployment.</p>
+
+    <div class="tech-phases">
+      <div class="tphase reveal">
+        <span class="tphase-num">01</span>
+        <div class="tphase-bar"></div>
+        <h3 class="tphase-title">Canadian Ingredient Supply Chain</h3>
+        <p class="tphase-text">Canada imports the majority of the premium nutraceutical and functional food ingredients it consumes. ZymaFlow's platform recovers these ingredient categories domestically — from Canadian fermentation industry co-product streams — reducing import dependence and establishing a new domestic supply chain in an underserved value chain segment.</p>
+      </div>
+      <div class="tphase tphase-featured reveal d1">
+        <span class="tphase-num">02</span>
+        <div class="tphase-bar"></div>
+        <h3 class="tphase-title">Multi-Stream Valorization</h3>
+        <p class="tphase-text">A single co-product input yields multiple distinct, market-ready ingredient categories — each with preserved native functional properties. This multi-stream recovery model maximises the economic value captured per kilogram of feedstock, delivering commercial outcomes that single-product approaches cannot replicate.</p>
+      </div>
+      <div class="tphase reveal d2">
+        <span class="tphase-num">03</span>
+        <div class="tphase-bar"></div>
+        <h3 class="tphase-title">Built for Consortium Deployment</h3>
+        <p class="tphase-text">The platform architecture is designed for collaborative deployment with fermentation industry feedstock partners, ingredient offtakers, and food manufacturers. Modular and scalable, it is suited to consortium-based co-investment from pilot through industrial scale — reducing capital risk for all partners.</p>
+      </div>
+    </div>
+
+    <div class="tech-ip reveal">
+      <p class="tech-ip-text"><strong>Intellectual Property:</strong> The ZymaFlow platform is protected by a pending patent application. Core process parameters and optimisation protocols are maintained as registered trade secrets. Detailed technical disclosure is available to qualified partners under executed NDA.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRODUCTS — asymmetric bento ══ -->
+<section id="products">
+  <div class="section-inner">
+    <span class="section-label reveal">Product Portfolio</span>
+    <h2 class="section-title reveal d1">Premium Ingredients<br><span>from a Single Feedstock</span></h2>
+    <p class="section-body reveal d2">Three distinct ingredient categories recovered in a single integrated process — each targeting high-value, established markets with verified commercial demand.</p>
+
+    <div class="products-bento">
+      <!-- Functional Proteins — top left, wide -->
+      <div class="pcard reveal">
+        <span class="pcard-label">Food · Nutraceutical</span>
+        <h3 class="pcard-title">Functional Proteins</h3>
+        <div class="pcard-bar"></div>
+        <p class="pcard-text">Fermentation-derived protein ingredients are valued across food formulation, plant-based product development, and sports nutrition for their functional properties and clean-label positioning. High-purity protein from fermentation co-product streams represents a growing market segment with established commercial demand.</p>
+        <div class="pcard-chips">
+          <span class="chip">Food Ingredients</span>
+          <span class="chip">Plant-Based</span>
+          <span class="chip">Sports Nutrition</span>
+        </div>
+      </div>
+      <!-- Beta-Glucan — tall right, spans both rows -->
+      <div class="pcard pcard-tall reveal d1">
+        <span class="pcard-label">Health · Functional Foods</span>
+        <h3 class="pcard-title">Beta-Glucan</h3>
+        <div class="pcard-bar"></div>
+        <p class="pcard-text">Beta-glucan is a well-established ingredient category in nutraceuticals and functional foods, valued for immune modulation, dietary fibre enrichment, and texture applications. Fermentation-derived beta-glucan competes in a market with verified buyer demand across supplements, functional foods, and encapsulation sectors.</p>
+        <div class="pcard-chips">
+          <span class="chip">Nutraceuticals</span>
+          <span class="chip">Functional Foods</span>
+          <span class="chip">Supplements</span>
+        </div>
+      </div>
+      <!-- Gut Health — bottom left -->
+      <div class="pcard reveal d2">
+        <span class="pcard-label">Pet Nutrition · Animal Feed</span>
+        <h3 class="pcard-title">Gut Health Ingredients</h3>
+        <div class="pcard-bar"></div>
+        <p class="pcard-text">The pet nutrition and animal feed sectors have established demand for prebiotic and gut health ingredients that support microbiome health, digestive performance, and pathogen exclusion. Fermentation co-product streams are a recognised source category for these ingredients across feed-grade applications.</p>
+        <div class="pcard-chips">
+          <span class="chip">Pet Nutrition</span>
+          <span class="chip">Animal Feed</span>
+          <span class="chip">Aquaculture</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARKET — vibrant teal, typography-driven stats ══ -->
+<section id="market">
+  <div class="market-wrap">
+    <div class="market-left">
+      <span class="section-label reveal">Market</span>
+      <h2 class="section-title reveal d1">Alberta-Based.<br><span>Nationally Scalable.</span></h2>
+      <p class="market-body reveal d2">Western Canada's growing fermentation industry generates significant volumes of recoverable co-product material. ZymaFlow is positioned to serve Alberta's craft and commercial fermentation sector as a regional anchor biorefinery, with a platform architecture designed for national expansion.</p>
+      <p class="market-body reveal d3" style="margin-top:16px;">Our ingredient categories address established and growing markets in food manufacturing, nutraceuticals, and pet nutrition. ZymaFlow's phased deployment model allows operations to begin at pilot and regional scale before expanding to industrial capacity — reducing capital risk while building feedstock supply relationships in parallel.</p>
+    </div>
+    <div class="market-stats reveal d2">
+      <div class="mstat">
+        <span class="mstat-val">Alberta</span>
+        <span class="mstat-desc">Home province and primary launch market — one of Canada's fastest-growing fermentation sectors</span>
+      </div>
+      <div class="mstat">
+        <span class="mstat-val">3 Sectors</span>
+        <span class="mstat-desc">Food ingredients · Nutraceuticals · Pet &amp; Animal Nutrition — diversified across established demand channels</span>
+      </div>
+      <div class="mstat">
+        <span class="mstat-val">Pilot → Industrial</span>
+        <span class="mstat-desc">Phased deployment tiers allow capital investment aligned to market growth and feedstock availability</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact">
+  <div class="contact-grid-bg"></div>
+  <div class="contact-accent-bg"></div>
+  <div class="contact-wrap" style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--s4);padding:var(--s9) 5%;">
+    <span class="contact-label" style="text-align:center;">Get In Touch</span>
+    <h2 class="contact-title" style="text-align:center;">Partner. Fund. <span>Collaborate.</span></h2>
+    <p class="contact-body" style="max-width:52ch;text-align:center;margin:0 auto;">We are actively seeking fermentation industry partners, co-development collaborators, and funding relationships. Detailed technical and commercial disclosure is available to qualified parties under NDA.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:var(--s2);">
+      <button class="btn-primary" onclick="openModal('Industry Partner')">Explore Partnership</button>
+      <button class="btn-outline" style="cursor:pointer;background:none;" onclick="openModal('Investment')">Investment &amp; Funding</button>
+    </div>
+    <p style="font-size:11px;color:rgba(255,255,255,0.22);margin-top:var(--s1);">We aim to respond within 2 business days.</p>
+  </div>
+</section>
+
+<!-- ══ CONTACT MODAL ══ -->
+<div class="modal-overlay" id="contact-modal" onclick="handleOverlayClick(event)">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+    <h3 class="modal-title" id="modal-title">Get In Touch</h3>
+    <p class="modal-sub">All enquiries are reviewed by the founding team. We aim to respond within 2 business days.</p>
+    <form id="contact-form" action="https://formspree.io/f/xlgojqkk" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" name="first_name" placeholder="Jane" required>
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" name="last_name" placeholder="Smith" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="org">Organisation</label>
+        <input type="text" id="org" name="organisation" placeholder="Company or institution" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="jane@company.com" required>
+      </div>
+      <div class="form-group">
+        <label for="enquiry">Enquiry Type</label>
+        <select id="enquiry" name="enquiry_type" required>
+          <option value="" disabled selected>Select one</option>
+          <option value="Industry Partner">Industry Partner — feedstock supply or ingredient offtake</option>
+          <option value="Investment">Investment &amp; Funding</option>
+          <option value="Grant Body">Grant Body or Innovation Program</option>
+          <option value="Research">Research &amp; Co-Development</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Brief description of your interest or project..." required></textarea>
+      </div>
+      <input type="text" name="_gotcha" style="display:none">
+      <button type="submit" class="form-submit">Send Enquiry</button>
+      <p class="form-note">By submitting this form you agree to be contacted by ZymaFlow BioRefinery regarding your enquiry. We do not share your information with third parties.</p>
+    </form>
+    <div id="form-success" style="display:none;">
+      <div class="form-success-msg">
+        <h3>Thank you for reaching out.</h3>
+        <p>We have received your enquiry and will be in touch within 2 business days.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <svg class="footer-z" viewBox="0 0 105.56673 111.29659" xmlns="http://www.w3.org/2000/svg" style="color:#3a8a87">
+    <use href="#zm"/>
+  </svg>
+  <span class="footer-name">ZymaFlow BioRefinery</span>
+  <span class="footer-tagline">Fermentation Waste. Reimagined.</span>
+  <span class="footer-location">Alberta · Canada</span>
+  <span class="footer-copy">© 2025 ZymaFlow BioRefinery Inc. All rights reserved. Patent Pending.</span>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobile-menu').classList.toggle('open');
+  }
+
+  // JS smooth scroll — works inside iframes
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function(e) {
+      const id = this.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (target) {
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.pageYOffset - 68;
+        window.scrollTo({ top, behavior: 'smooth' });
+        document.getElementById('mobile-menu').classList.remove('open');
+      }
+    });
+  });
+
+  // Modal
+  function openModal(type) {
+    const modal = document.getElementById('contact-modal');
+    const select = document.getElementById('enquiry');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    if (type && select) {
+      for (let opt of select.options) {
+        if (opt.value === type) { select.value = type; break; }
+      }
+    }
+  }
+  function closeModal() {
+    document.getElementById('contact-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('contact-modal')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Form submission
+  const form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = form.querySelector('.form-submit');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('form-success').style.display = 'block';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Send Enquiry';
+          alert('Something went wrong. Please try again.');
+        }
+      } catch(err) {
+        btn.disabled = false;
+        btn.textContent = 'Send Enquiry';
+        alert('Something went wrong. Please try again.');
+      }
+    });
+  }
+
+  // Scroll reveal — opt-in animation with hard fallback
+  const revealEls = document.querySelectorAll('.reveal');
+  // Only animate if not in a sandboxed iframe (check scrollHeight > viewportHeight)
+  const canScroll = document.documentElement.scrollHeight > window.innerHeight * 1.2;
+  if (canScroll && 'IntersectionObserver' in window) {
+    document.body.classList.add('js-anim');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+    // Hard fallback: show everything after 2.5s regardless
+    setTimeout(() => revealEls.forEach(el => el.classList.add('visible')), 2500);
+  }
+</script>
+</body>
+</html>
